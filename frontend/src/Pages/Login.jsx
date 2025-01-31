@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Cookie from "js-cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +15,10 @@ const Login = () => {
       const response = await axios.post("http://localhost:3000/auth/login",{ email, password });
       // Store token and role in localStorage
       localStorage.setItem("token", response.data.data.token);
-      localStorage.setItem("role", response.data.role);
+      // localStorage.setItem("role", response.data.role);
+
+      // Store token in cookie
+      Cookie.set("token", response.data.data.token);
 
       // Redirect based on role
       if (response.data.role === "admin") {
