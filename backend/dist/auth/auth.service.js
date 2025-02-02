@@ -29,14 +29,12 @@ let AuthService = class AuthService {
         });
         if (User) {
             return {
-                message: 'User Found',
-                data: { email: User.email, name: User.name },
+                message: "User Found",
+                data: { email: User.email, name: User.name, role: User.role },
             };
         }
         else {
-            return {
-                message: 'Not Found',
-            };
+            throw new common_1.NotFoundException("User Not Found");
         }
     }
     async registerUser(Users) {
@@ -44,17 +42,17 @@ let AuthService = class AuthService {
             where: { email: Users.email },
         });
         if (existingUser) {
-            throw new common_1.BadRequestException('User already exists');
+            throw new common_1.BadRequestException("User already exists");
         }
         if (Users.password === Users.confirmPassword) {
             Users.password = bcrypt.hashSync(Users.password, 10);
             return {
-                message: 'User Registered',
+                message: "User Registered",
                 data: await this.registerRepository.save(Users),
             };
         }
         else {
-            throw new common_1.UnauthorizedException('Passwords are not matching!!');
+            throw new common_1.UnauthorizedException("Passwords are not matching!!");
         }
     }
     async loginUser(UserData) {
@@ -66,12 +64,16 @@ let AuthService = class AuthService {
             const token = jwt.sign({ email: UserData.email }, JSON.stringify(process.env.SECRET_KEY), { expiresIn: 60 * 5 });
             UserData.token = `Bearer ${token}`;
             return {
-                message: 'Login Successful',
-                data: { email: UserData.email, token: UserData.token },
+                message: "Login Successful",
+                data: {
+                    email: UserData.email,
+                    token: UserData.token,
+                    role: validatedUser.role,
+                },
             };
         }
         else {
-            throw new common_1.NotFoundException('Invalid Credentials');
+            throw new common_1.NotFoundException("Invalid Credentials");
         }
     }
 };

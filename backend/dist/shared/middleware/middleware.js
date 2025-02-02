@@ -11,17 +11,17 @@ const common_1 = require("@nestjs/common");
 const jwt = require("jsonwebtoken");
 let AuthMiddleware = class AuthMiddleware {
     use(req, res, next) {
-        const headers = req.headers?.authorization?.split(' ');
+        const headers = req.headers?.authorization?.split(" ");
         if (!headers) {
-            throw new common_1.UnauthorizedException('Not Authorized');
+            throw new common_1.UnauthorizedException("Not Authorized");
         }
         else {
-            if (headers[0] === 'Bearer' &&
+            if (headers[0] === "Bearer" &&
                 jwt.verify(headers[1], JSON.stringify(process.env.SECRET_KEY))) {
                 return next();
             }
             else {
-                throw new common_1.BadRequestException('Invalid Token');
+                throw new common_1.BadRequestException("Invalid Token");
             }
         }
     }

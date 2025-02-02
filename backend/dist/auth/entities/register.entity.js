@@ -40,13 +40,14 @@ __decorate([
     __metadata("design:type", String)
 ], Register.prototype, "password", void 0);
 __decorate([
+    (0, typeorm_1.Column)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsEnum)(['admin', 'agent']),
+    (0, class_validator_1.IsEnum)(["admin", "agent"]),
     __metadata("design:type", String)
 ], Register.prototype, "role", void 0);
 exports.Register = Register = __decorate([
     (0, common_1.Injectable)(),
-    (0, typeorm_1.Entity)('RegisteredUserData')
+    (0, typeorm_1.Entity)("RegisteredUserData")
 ], Register);
 //# sourceMappingURL=register.entity.js.map

@@ -59,4 +59,10 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], loginDTO.prototype, "token", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(['admin', 'agent']),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], loginDTO.prototype, "role", void 0);
 //# sourceMappingURL=auth.dto.js.map

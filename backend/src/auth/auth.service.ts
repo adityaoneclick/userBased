@@ -3,13 +3,13 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
-} from '@nestjs/common';
-import { loginDTO, registerDTO } from './dto/auth.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Register } from './entities/register.entity';
-import { Repository } from 'typeorm';
-import * as jwt from 'jsonwebtoken';
-import * as bcrypt from 'bcrypt';
+} from "@nestjs/common";
+import { loginDTO, registerDTO } from "./dto/auth.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Register } from "./entities/register.entity";
+import { Repository } from "typeorm";
+import * as jwt from "jsonwebtoken";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService {
@@ -23,13 +23,11 @@ export class AuthService {
     });
     if (User) {
       return {
-        message: 'User Found',
-        data: { email: User.email, name: User.name },
+        message: "User Found",
+        data: { email: User.email, name: User.name, role: User.role },
       };
     } else {
-      return {
-        message: 'Not Found',
-      };
+      throw new NotFoundException("User Not Found");
     }
   }
   async registerUser(Users: registerDTO) {
@@ -37,16 +35,16 @@ export class AuthService {
       where: { email: Users.email },
     });
     if (existingUser) {
-      throw new BadRequestException('User already exists');
+      throw new BadRequestException("User already exists");
     }
     if (Users.password === Users.confirmPassword) {
       Users.password = bcrypt.hashSync(Users.password, 10);
       return {
-        message: 'User Registered',
+        message: "User Registered",
         data: await this.registerRepository.save(Users),
       };
     } else {
-      throw new UnauthorizedException('Passwords are not matching!!');
+      throw new UnauthorizedException("Passwords are not matching!!");
     }
   }
   async loginUser(UserData: loginDTO) {
@@ -64,11 +62,15 @@ export class AuthService {
       );
       UserData.token = `Bearer ${token}`;
       return {
-        message: 'Login Successful',
-        data: { email: UserData.email, token: UserData.token },
+        message: "Login Successful",
+        data: {
+          email: UserData.email,
+          token: UserData.token,
+          role: validatedUser.role,
+        },
       };
     } else {
-      throw new NotFoundException('Invalid Credentials');
+      throw new NotFoundException("Invalid Credentials");
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
   IsEmail,
   IsEnum,
@@ -6,11 +6,11 @@ import {
   IsNumber,
   IsString,
   IsStrongPassword,
-} from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+} from "class-validator";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Injectable()
-@Entity('RegisteredUserData')
+@Entity("RegisteredUserData")
 export class Register {
   @PrimaryGeneratedColumn()
   @IsNumber()
@@ -27,8 +27,9 @@ export class Register {
   @IsString()
   @IsStrongPassword()
   password: string;
+  @Column()
   @IsString()
   @IsNotEmpty()
-  @IsEnum(['admin', 'agent'])
+  @IsEnum(["admin", "agent"])
   role: string;
 }

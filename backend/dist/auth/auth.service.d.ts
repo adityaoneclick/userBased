@@ -1,6 +1,6 @@
-import { loginDTO, registerDTO } from './dto/auth.dto';
-import { Register } from './entities/register.entity';
-import { Repository } from 'typeorm';
+import { loginDTO, registerDTO } from "./dto/auth.dto";
+import { Register } from "./entities/register.entity";
+import { Repository } from "typeorm";
 export declare class AuthService {
     private registerRepository;
     constructor(registerRepository: Repository<Register>);
@@ -9,10 +9,8 @@ export declare class AuthService {
         data: {
             email: string;
             name: string;
+            role: string;
         };
-    } | {
-        message: string;
-        data?: undefined;
     }>;
     registerUser(Users: registerDTO): Promise<{
         message: string;
@@ -23,6 +21,7 @@ export declare class AuthService {
         data: {
             email: string;
             token: string;
+            role: string;
         };
     }>;
 }

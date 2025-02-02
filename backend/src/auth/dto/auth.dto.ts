@@ -38,4 +38,8 @@ export class loginDTO {
   @IsString()
   @IsOptional()
   token: string;
+  @IsOptional()
+  @IsEnum(['admin', 'agent'])
+  @IsNotEmpty()
+  role: string;
 }

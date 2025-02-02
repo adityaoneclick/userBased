@@ -8,10 +8,8 @@ export declare class AuthController {
         data: {
             email: string;
             name: string;
+            role: string;
         };
-    } | {
-        message: string;
-        data?: undefined;
     }>;
     registerUser(User: registerDTO): Promise<{
         message: string;
@@ -22,6 +20,7 @@ export declare class AuthController {
         data: {
             email: string;
             token: string;
+            role: string;
         };
     }>;
 }

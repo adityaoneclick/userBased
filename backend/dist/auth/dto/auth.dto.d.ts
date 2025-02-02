@@ -9,4 +9,5 @@ export declare class loginDTO {
     email: string;
     password: string;
     token: string;
+    role: string;
 }
