@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
-// import ProtectedRoute from "./ProtectedRoute";
-import Dashboard from "./Pages/Dashboard"; // Add these components
-import Users from "./Pages/Users"; // Add these components
-import HomePage from "./Pages/HomePage"; // Home page after login
+import Dashboard from "./Pages/Dashboard";
+import Users from "./Pages/Users";
+import HomePage from "./Pages/HomePage";
 import { RefreshHandler } from "./Utils/RefreshHandler";
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 function App() {
 
@@ -17,15 +17,16 @@ function App() {
   };
 
   return (
-    
     <Router>
+      <ToastContainer/>
       <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
       <Routes>
-        <Route path="/" element={<PrivateRoute element={<HomePage/>} /> } />
+        {/* <Route path="/" element={<PrivateRoute element={<HomePage/>} /> } /> */}
+        <Route path="/" element={<HomePage/>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="/dashboard" element={<PrivateRoute element={<Dashboard roles={['agent','admin']} />}/> } />
+        <Route path="/users" element={<PrivateRoute element={<Users roles={['admin']}/>} /> } />
       </Routes>
     </Router>
   );

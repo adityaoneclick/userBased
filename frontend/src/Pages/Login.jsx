@@ -1,8 +1,7 @@
-// src/Pages/Login.jsx
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import Cookie from "js-cookie";
+import API from "../Axios/AxiosInstance";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,33 +11,42 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/auth/login",{ email, password });
-      // Store token and role in localStorage
-      localStorage.setItem("token", response.data.data.token);
-      // localStorage.setItem("role", response.data.role);
+      const response = await API.post("/auth/login", {
+        email,
+        password,
+      });
+     
+      Cookie.set("token", response.data.data.token, { expires: 5 / 1440 });
+      Cookie.set("role", response.data.data.role, { expires: 5 / 1440 });
 
-      // Store token in cookie
-      Cookie.set("token", response.data.data.token);
-
-      // Redirect based on role
-      if (response.data.role === "admin") {
+      if (response.data.data.role === "admin") {
         navigate("/users");
       } else {
         navigate("/dashboard");
       }
     } catch (error) {
-      console.error("Login Failed:", error.response?.data?.message || error.message);
+      console.error(
+        "Login Failed:",
+        error.response?.data?.message || error.message
+      );
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <form className="bg-white p-6 rounded shadow-md w-96" onSubmit={handleLogin}>
-        <h2 className="text-xl font-bold mb-4 text-center">Login</h2>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+      <form
+        className="bg-white p-8 shadow-lg rounded-lg w-full max-w-md space-y-4"
+        onSubmit={handleLogin}
+      >
+        <h2 className="text-2xl font-semibold text-gray-700 text-center">
+          Welcome Back
+        </h2>
+        <p className="text-gray-500 text-center">Sign in to your account</p>
+
         <input
           type="email"
           placeholder="Email"
-          className="w-full mb-3 p-2 border rounded"
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -46,14 +54,25 @@ const Login = () => {
         <input
           type="password"
           placeholder="Password"
-          className="w-full mb-3 p-2 border rounded"
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-blue-600 transition"
+        >
           Login
         </button>
+
+        <p className="text-center text-gray-600">
+          Not a member?{" "}
+          <Link to="/register" className="text-blue-500 hover:underline">
+            Register Here!
+          </Link>
+        </p>
       </form>
     </div>
   );
